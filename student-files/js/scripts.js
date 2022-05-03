@@ -1,6 +1,10 @@
+const randomUserURL = "https://randomuser.me/api/?results=12";
+const searchContainer = document.getElementsByClassName('search-container');
+const galleryDiv = document.getElementById('gallery');
+
 /** 
  * Search markup:  
- **/ 
+ */ 
 
 // You can use the commented out markup below as a template
 // for your search feature and append it to this `search-container` div.
@@ -13,13 +17,10 @@
 //     <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
 // </form>
 
-const randomUserURL = "https://randomuser.me/api/?results=12";
-const searchContainer = document.getElementsByClassName('search-container');
-const galleryDiv = document.getElementById('gallery');
-
 /**
  * Get and display 12 random users
  */
+
 async function getJSON(url) {
     try {
         const response = await fetch(url);
