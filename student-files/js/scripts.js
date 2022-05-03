@@ -13,9 +13,21 @@
 //     <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
 // </form>
 
-const randomUserURL = "https://randomuser.me/api/?results=12?format=json";
+const randomUserURL = "https://randomuser.me/api/?results=12";
 const searchContainer = document.getElementsByClassName('search-container');
 const galleryDiv = document.getElementById('gallery');
 
+/**
+ * Get and display 12 random users
+ */
+async function getJSON(url) {
+    try {
+        const response = await fetch(url);
+        return await response.json();
+    } catch(error){
+        throw error;
+        console.error('Uh oh, something has gone wrong!')
+    }
+}
 
-console.log(randomUserURL);
+console.log(getJSON(randomUserURL));
