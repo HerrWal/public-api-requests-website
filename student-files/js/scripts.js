@@ -31,4 +31,16 @@ async function getJSON(url) {
     }
 }
 
-console.log(getJSON(randomUserURL));
+async function getRandomUsers(url) {
+    const userJSON = await getJSON(url);
+    const contactInfo = userJSON.results.map(async (contact) => {
+        const image = contact.picture.thumbnail.toString();
+        const name = `${contact.name.first} ${contact.name.last}`;
+        const email = contact.email;
+        const city = `${contact.location.city}, ${contact.location.country}`;
+        return {image, name, email, city}
+    });
+    return Promise.all(contactInfo);
+}
+
+console.log(getRandomUsers(randomUserURL));
