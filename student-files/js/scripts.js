@@ -1,6 +1,7 @@
 const randomUserURL = "https://randomuser.me/api/?results=12";
 const searchContainer = document.getElementsByClassName('search-container');
 const galleryDiv = document.getElementById('gallery');
+const body = document.querySelector('body');
 
 /** 
  * Search markup:  
@@ -38,12 +39,15 @@ async function getRandomUsers(url) {
         const name = `${contact.name.first} ${contact.name.last}`;
         const email = contact.email;
         const city = `${contact.location.city}, ${contact.location.country}`;
-        return {image, name, email, city}
+        const cell = contact.cell;
+        const address = contact.location.street;
+        const street = `${address.number} ${address.name}`;        
+        const postCode = contact.location.postCode;            
+        return {image, name, email, city, cell, address, street, postCode};
     });
     return Promise.all(contactInfo);
 }
 
-console.log(getRandomUsers(randomUserURL));
 
 /**
  * Gallery markup
@@ -72,7 +76,16 @@ function generateHTML(data) {
  * Modal markup
  */
 
-/* <div class="modal-container">
+function createModal(data) {
+    const modalContainer = () => {
+        const div = document.createElement('div');
+        div.className = 'modal-container';
+        return div;
+    }
+    data.map((contact) => {
+              
+    });
+    modalContainer.innerHTML = `
     <div class="modal">
         <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
         <div class="modal-info-container">
@@ -86,13 +99,35 @@ function generateHTML(data) {
             <p class="modal-text">Birthday: 10/21/2015</p>
         </div>
     </div>
+    `
+    /* <div class="modal-container">       
 
-    // IMPORTANT: Below is only for exceeds tasks 
-    <div class="modal-btn-container">
-        <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-        <button type="button" id="modal-next" class="modal-next btn">Next</button>
-    </div>
-</div> */
+        // IMPORTANT: Below is only for exceeds tasks 
+        <div class="modal-btn-container">
+            <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+            <button type="button" id="modal-next" class="modal-next btn">Next</button>
+        </div>
+    </div> */
+}
+
+/**
+ * Card handler
+ */
+
+galleryDiv.addEventListener('click', event => {
+    const cards = galleryDiv.children;
+    console.log(event.target.parentElement)    
+    for (let i = 0; i<cards.length; i++ ) {
+        
+        
+        if (event.target.parentElement === cards[i]) {
+            console.log(cards[i]);
+        } 
+    }
+});
+
+
 
 getRandomUsers(randomUserURL)
     .then(generateHTML)
+
