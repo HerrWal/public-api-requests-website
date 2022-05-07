@@ -2,6 +2,7 @@ const randomUserURL = "https://randomuser.me/api/?results=12";
 const searchContainer = document.getElementsByClassName('search-container');
 const galleryDiv = document.getElementById('gallery');
 const body = document.querySelector('body');
+let contactInfo;
 
 /** 
  * Search markup:  
@@ -34,7 +35,7 @@ async function getJSON(url) {
 
 async function getRandomUsers(url) {
     const userJSON = await getJSON(url);
-    const contactInfo = userJSON.results.map(async (contact) => {
+    contactInfo = userJSON.results.map((contact) => {
         const image = contact.picture.large.toString();
         const name = `${contact.name.first} ${contact.name.last}`;
         const email = contact.email;
@@ -42,8 +43,9 @@ async function getRandomUsers(url) {
         const cell = contact.cell;
         const address = contact.location.street;
         const street = `${address.number} ${address.name}`;        
-        const postCode = contact.location.postCode;            
-        return {image, name, email, city, cell, address, street, postCode};
+        const postCode = contact.location.postCode;
+        const dob = contact.dob.date.slice(0,9);            
+        return {image, name, email, city, cell, address, street, postCode, dob};
     });
     return Promise.all(contactInfo);
 }
@@ -76,30 +78,29 @@ function generateHTML(data) {
  * Modal markup
  */
 
-function createModal(data) {
+function createModal(contact) {
     const modalContainer = () => {
         const div = document.createElement('div');
         div.className = 'modal-container';
         return div;
     }
-    data.map((contact) => {
-              
-    });
     modalContainer.innerHTML = `
-    <div class="modal">
-        <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-        <div class="modal-info-container">
-            <img class="modal-img" src="https://placehold.it/125x125" alt="profile picture">
-            <h3 id="name" class="modal-name cap">name</h3>
-            <p class="modal-text">email</p>
-            <p class="modal-text cap">city</p>
-            <hr>
-            <p class="modal-text">(555) 555-5555</p>
-            <p class="modal-text">123 Portland Ave., Portland, OR 97204</p>
-            <p class="modal-text">Birthday: 10/21/2015</p>
+        <div class="modal">
+            <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+            <div class="modal-info-container">
+                <img class="modal-img" src="${contact.image}" alt="profile picture">
+                <h3 id="name" class="modal-name cap">${contact.name}</h3>
+                <p class="modal-text">${contact.email}</p>
+                <p class="modal-text cap">${city}</p>
+                <hr>
+                <p class="modal-text">${contact.cell}</p>
+                <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
+                <p class="modal-text">Birthday: 10/21/2015</p>
+            </div>
         </div>
-    </div>
-    `
+    `              
+}
+    
     /* <div class="modal-container">       
 
         // IMPORTANT: Below is only for exceeds tasks 
@@ -108,19 +109,15 @@ function createModal(data) {
             <button type="button" id="modal-next" class="modal-next btn">Next</button>
         </div>
     </div> */
-}
 
 /**
  * Card handler
  */
 
 galleryDiv.addEventListener('click', event => {
-    const cards = galleryDiv.children;
-    console.log(event.target.parentElement)    
-    for (let i = 0; i<cards.length; i++ ) {
-        
-        
-        if (event.target.parentElement === cards[i]) {
+    const cards = galleryDiv.children;        
+    for (let i = 0; i<cards.length; i++ ) {       
+        if (cards[i].contains(event.target)) {
             console.log(cards[i]);
         } 
     }
@@ -130,4 +127,6 @@ galleryDiv.addEventListener('click', event => {
 
 getRandomUsers(randomUserURL)
     .then(generateHTML)
+    .finally()
 
+console.log(contactInfo)    ;
