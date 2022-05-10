@@ -2,7 +2,7 @@ const randomUserURL = "https://randomuser.me/api/?results=12";
 const searchContainer = document.getElementsByClassName('search-container');
 const galleryDiv = document.getElementById('gallery');
 const body = document.querySelector('body');
-let contactInfo;
+const employees = [];
 
 /** 
  * Search markup:  
@@ -35,7 +35,7 @@ async function getJSON(url) {
 
 async function getRandomUsers(url) {
     const userJSON = await getJSON(url);
-    contactInfo = userJSON.results.map((contact) => {
+    const contactInfo = userJSON.results.map((contact) => {
         const image = contact.picture.large.toString();
         const name = `${contact.name.first} ${contact.name.last}`;
         const email = contact.email;
@@ -44,9 +44,10 @@ async function getRandomUsers(url) {
         const address = contact.location.street;
         const street = `${address.number} ${address.name}`;        
         const postCode = contact.location.postCode;
-        const dob = contact.dob.date.slice(0,9);            
+        const dob = contact.dob.date.slice(0,9);         
         return {image, name, email, city, cell, address, street, postCode, dob};
     });
+    employees.push(contactInfo)
     return Promise.all(contactInfo);
 }
 
@@ -55,8 +56,7 @@ async function getRandomUsers(url) {
  * Gallery markup
  */
 
-function generateHTML(data) {
-    console.log(data);
+function generateHTML(data) {    
     data.map((contact) => {
         const card = document.createElement('div');
         card.classList.add('card');
@@ -127,6 +127,3 @@ galleryDiv.addEventListener('click', event => {
 
 getRandomUsers(randomUserURL)
     .then(generateHTML)
-    .finally()
-
-console.log(contactInfo)    ;
