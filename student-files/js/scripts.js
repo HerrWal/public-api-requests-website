@@ -79,36 +79,57 @@ function generateHTML(data) {
  */
 
 function createModal(contact) {
-    const modalContainer = () => {
+    function createDiv(className) {
         const div = document.createElement('div');
-        div.className = 'modal-container';
-        return div;
+        div.className = className;
+        return div
     }
-    modalContainer.innerHTML = `
-        <div class="modal">
-            <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-            <div class="modal-info-container">
-                <img class="modal-img" src="${contact.image}" alt="profile picture">
-                <h3 id="name" class="modal-name cap">${contact.name}</h3>
-                <p class="modal-text">${contact.email}</p>
-                <p class="modal-text cap">${city}</p>
-                <hr>
-                <p class="modal-text">${contact.cell}</p>
-                <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
-                <p class="modal-text">Birthday: 10/21/2015</p>
-            </div>
-        </div>
-    `              
-}
-    
-    /* <div class="modal-container">       
+    function createBtn(id, className) {
+        const btn = document.createElement('button');
+        btn.type = "button";
+        btn.id = id;
+        btn.className = className;
+        
+    }
+    const modalContainer = createDiv("modal-container");
+    const modalDiv = createDiv("modal");
+    const infoContainer = createDiv("modal-info-container");
+    const btnContainer = createDiv("modal-btn-container");
 
-        // IMPORTANT: Below is only for exceeds tasks 
-        <div class="modal-btn-container">
-            <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-            <button type="button" id="modal-next" class="modal-next btn">Next</button>
-        </div>
-    </div> */
+    infoContainer.innerHTML = `
+        <img class="modal-img" src="${contact.image}" alt="profile picture">
+        <h3 id="name" class="modal-name cap">${contact.name}</h3>
+        <p class="modal-text">${contact.email}</p>
+        <p class="modal-text cap">${contact.city}</p>
+        <hr>
+        <p class="modal-text">${contact.cell}</p>
+        <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
+        <p class="modal-text">Birthday:${contact.dob}</p>
+    `;
+}
+
+// function createModal(contact) {
+    // const modalContainer = () => {
+    //     const div = document.createElement('div');
+    //     div.className = 'modal-container';
+    //     return div;
+//     }
+//     modalContainer.innerHTML = `
+//         <div class="modal">
+//             <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+//             <div class="modal-info-container">
+                // <img class="modal-img" src="${contact.image}" alt="profile picture">
+                // <h3 id="name" class="modal-name cap">${contact.name}</h3>
+                // <p class="modal-text">${contact.email}</p>
+                // <p class="modal-text cap">${city}</p>
+                // <hr>
+                // <p class="modal-text">${contact.cell}</p>
+                // <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
+                // <p class="modal-text">Birthday: 10/21/2015</p>
+//             </div>
+//         </div>
+//     `              
+// }
 
 /**
  * Card handler
