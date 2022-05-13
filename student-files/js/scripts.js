@@ -2,7 +2,7 @@ const randomUserURL = "https://randomuser.me/api/?results=12";
 const searchContainer = document.getElementsByClassName('search-container');
 const galleryDiv = document.getElementById('gallery');
 const body = document.querySelector('body');
-const employees = [];
+let employees = {};
 
 /** 
  * Search markup:  
@@ -47,7 +47,7 @@ async function getRandomUsers(url) {
         const dob = contact.dob.date.slice(0,9);         
         return {image, name, email, city, cell, address, street, postCode, dob};
     });
-    employees.push(contactInfo)
+    employees = contactInfo;
     return Promise.all(contactInfo);
 }
 
@@ -89,12 +89,13 @@ function createModal(contact) {
         btn.type = "button";
         btn.id = id;
         btn.className = className;
-        
+        return btn
     }
     const modalContainer = createDiv("modal-container");
     const modalDiv = createDiv("modal");
     const infoContainer = createDiv("modal-info-container");
     const btnContainer = createDiv("modal-btn-container");
+    const closeBtn = createBtn("modal-close-btn", "modal-close-btn");
 
     infoContainer.innerHTML = `
         <img class="modal-img" src="${contact.image}" alt="profile picture">
@@ -106,6 +107,10 @@ function createModal(contact) {
         <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
         <p class="modal-text">Birthday:${contact.dob}</p>
     `;
+    modalDiv.insertAdjacentElement('beforebegin', closeBtn);
+    modalDiv.insertAdjacentElement('afterend', infoContainer);
+    modalContainer.insertAdjacentElement('afterend', modalDiv);
+    body.insertAdjacentElement('afterbegin', modalContainer);
 }
 
 // function createModal(contact) {
@@ -135,16 +140,25 @@ function createModal(contact) {
  * Card handler
  */
 
-galleryDiv.addEventListener('click', event => {
-    const cards = galleryDiv.children;        
-    for (let i = 0; i<cards.length; i++ ) {       
-        if (cards[i].contains(event.target)) {
-            console.log(cards[i]);
-        } 
-    }
-});
+// galleryDiv.addEventListener('click', event => {
+//     const cards = galleryDiv.children;        
+//     for (let i = 0; i<cards.length; i++ ) {       
+//         if (cards[i].contains(event.target)) {
+//             console.log(cards[i]);
+//         } 
+//     }
+// });
 
 
 
 getRandomUsers(randomUserURL)
     .then(generateHTML)
+    .then(galleryDiv.addEventListener('click', event => {
+        const cards = galleryDiv.children;        
+        for (let i = 0; i<cards.length; i++) {       
+            if (cards[i].contains(event.target)) {
+                console.log(employees[i]);
+                createModal(employees[i]);
+            } 
+        }
+    }))
