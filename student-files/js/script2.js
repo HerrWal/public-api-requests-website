@@ -47,6 +47,42 @@ function generateHTML(contactInfo) {
   });
 }
 
+const contactModal = async contact => {
+  function createDiv(className) {
+    const div = document.createElement("div");
+    div.className = className;
+    return div;
+  }
+  function createBtn(id, className, text) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.id = id;
+    btn.className = className;
+    btn.innerHTML = `${text}`;
+    return btn;
+  }
+  const modalContainer = await createDiv("modal-container");
+  const modalDiv = await createDiv("modal");
+  const infoContainer = await createDiv("modal-info-container");
+  const btnContainer = await createDiv("modal-btn-container");
+  const closeBtn = await createBtn(
+    "modal-close-btn",
+    "modal-close-btn",
+    "<strong>X</strong>"
+  );
+  infoContainer.innerHTML = `
+          <img class="modal-img" src="${contact.image}" alt="profile picture">
+          <h3 id="name" class="modal-name cap">${contact.name}</h3>
+          <p class="modal-text">${contact.email}</p>
+          <p class="modal-text cap">${contact.city}</p>
+          <hr>
+          <p class="modal-text">${contact.cell}</p>
+          <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
+          <p class="modal-text">Birthday:${contact.dob}</p>
+      `;    
+};
+
+
 function createModal(contact) {
     function createDiv(className) {
       const div = document.createElement("div");
@@ -102,6 +138,7 @@ const loadPage = async () => {
   try {
     const contactsList = await randomUsers(randomUsersURL);
     const contactCards = await generateHTML(contactsList);
+    contactModal();
     return contactCards;
   } catch (err) {
     throw err;
@@ -110,3 +147,5 @@ const loadPage = async () => {
 };
 
 loadPage();
+contactModal()
+
