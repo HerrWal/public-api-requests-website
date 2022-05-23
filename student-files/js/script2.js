@@ -61,25 +61,57 @@ const contactModal = async contact => {
     btn.innerHTML = `${text}`;
     return btn;
   }
-  const modalContainer = await createDiv("modal-container");
-  const modalDiv = await createDiv("modal");
-  const infoContainer = await createDiv("modal-info-container");
-  const btnContainer = await createDiv("modal-btn-container");
-  const closeBtn = await createBtn(
-    "modal-close-btn",
-    "modal-close-btn",
-    "<strong>X</strong>"
-  );
-  infoContainer.innerHTML = `
-          <img class="modal-img" src="${contact.image}" alt="profile picture">
-          <h3 id="name" class="modal-name cap">${contact.name}</h3>
-          <p class="modal-text">${contact.email}</p>
-          <p class="modal-text cap">${contact.city}</p>
-          <hr>
-          <p class="modal-text">${contact.cell}</p>
-          <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
-          <p class="modal-text">Birthday:${contact.dob}</p>
-      `;    
+
+  const modalContainer = async function() {
+    await createDiv("modal-container");    
+    modalContainer.appendChild(modalDiv);
+    modalContainer.appendChild(btnContainer);
+    modalContainer.classList.toggle('show-modal');
+    galleryDiv.insertAdjacentElement("afterend", modalContainer);
+  };
+  const modalDiv = async function() {
+    await createDiv("modal");
+  }
+  const infoContainer = async function() {
+   await createDiv("modal-info-container");
+    infoContainer.innerHTML = `
+    <img class="modal-img" src="${contact.image}" alt="profile picture">
+    <h3 id="name" class="modal-name cap">${contact.name}</h3>
+    <p class="modal-text">${contact.email}</p>
+    <p class="modal-text cap">${contact.city}</p>
+    <hr>
+    <p class="modal-text">${contact.cell}</p>
+    <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
+    <p class="modal-text">Birthday:${contact.dob}</p>
+    `;
+  };
+  const btnContainer = async function() {
+    await createDiv("modal-btn-container");
+    btnContainer.innerHTML = `
+          <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+          <button type="button" id="modal-next" class="modal-next btn">Next</button>
+    `;
+  };
+  const closeBtn = async function() {
+    awaitcreateBtn(
+      "modal-close-btn",
+      "modal-close-btn",
+      "<strong>X</strong>"
+    );
+  }; 
+  
+    // modalDiv.appendChild(closeBtn);
+    // modalDiv.appendChild(infoContainer);
+    // modalContainer.appendChild(modalDiv);
+    // modalContainer.appendChild(btnContainer);
+    // modalContainer.classList.toggle('show-modal');
+    // galleryDiv.insertAdjacentElement("afterend", modalContainer);
+    // modal = modalContainer;
+    // closeModal = closeBtn;
+    // console.log(modalContainer);
+  
+  
+  return modalContainer  
 };
 
 
@@ -111,7 +143,7 @@ function createModal(contact) {
     btnContainer.innerHTML = `
           <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
           <button type="button" id="modal-next" class="modal-next btn">Next</button>
-      `;
+    `;
   
     infoContainer.innerHTML = `
           <img class="modal-img" src="${contact.image}" alt="profile picture">
@@ -147,5 +179,5 @@ const loadPage = async () => {
 };
 
 loadPage();
-contactModal()
+contactModal(randomUsers[0])
 
