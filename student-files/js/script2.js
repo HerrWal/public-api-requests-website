@@ -1,4 +1,6 @@
 const randomUsersURL = "https://randomuser.me/api/?results=12";
+const galleryDiv = document.getElementById("gallery");
+const cards = galleryDiv.children;
 
 const usersJSON = async (url) => {
   try {
@@ -42,135 +44,61 @@ function generateHTML(contactInfo) {
                     <p class="card-text cap">${contact.city}</p>
                 </div>
             `;
-    const galleryDiv = document.getElementById("gallery");        
+
     galleryDiv.insertAdjacentElement("beforeend", card);
   });
 }
 
-const contactModal = async contact => {
-  function createDiv(className) {
-    const div = document.createElement("div");
-    div.className = className;
-    return div;
-  }
-  function createBtn(id, className, text) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.id = id;
-    btn.className = className;
-    btn.innerHTML = `${text}`;
-    return btn;
-  }
-
-  const modalContainer = async function() {
-    await createDiv("modal-container");    
-    modalContainer.appendChild(modalDiv);
-    modalContainer.appendChild(btnContainer);
-    modalContainer.classList.toggle('show-modal');
-    galleryDiv.insertAdjacentElement("afterend", modalContainer);
-  };
-  const modalDiv = async function() {
-    await createDiv("modal");
-  }
-  const infoContainer = async function() {
-   await createDiv("modal-info-container");
-    infoContainer.innerHTML = `
-    <img class="modal-img" src="${contact.image}" alt="profile picture">
-    <h3 id="name" class="modal-name cap">${contact.name}</h3>
-    <p class="modal-text">${contact.email}</p>
-    <p class="modal-text cap">${contact.city}</p>
-    <hr>
-    <p class="modal-text">${contact.cell}</p>
-    <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
-    <p class="modal-text">Birthday:${contact.dob}</p>
-    `;
-  };
-  const btnContainer = async function() {
-    await createDiv("modal-btn-container");
-    btnContainer.innerHTML = `
-          <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-          <button type="button" id="modal-next" class="modal-next btn">Next</button>
-    `;
-  };
-  const closeBtn = async function() {
-    awaitcreateBtn(
-      "modal-close-btn",
-      "modal-close-btn",
-      "<strong>X</strong>"
-    );
-  }; 
-  
-    // modalDiv.appendChild(closeBtn);
-    // modalDiv.appendChild(infoContainer);
-    // modalContainer.appendChild(modalDiv);
-    // modalContainer.appendChild(btnContainer);
-    // modalContainer.classList.toggle('show-modal');
-    // galleryDiv.insertAdjacentElement("afterend", modalContainer);
-    // modal = modalContainer;
-    // closeModal = closeBtn;
-    // console.log(modalContainer);
-  
-  
-  return modalContainer  
+const createModal = (contact) => {
+  return `<div class="modal-container">
+  <div class="modal">
+      <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+        <div class="modal-info-container">
+        <img class="modal-img" src="${contact.image}" alt="profile picture">
+        <h3 id="name" class="modal-name cap">${contact.name}</h3>
+        <p class="modal-text">${contact.email}</p>
+        <p class="modal-text cap">${contact.city}</p>
+        <hr>
+        <p class="modal-text">${contact.cell}</p>
+        <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
+        <p class="modal-text">Birthday:${contact.dob}</p>
+      </div>
+  </div>
+  <div class="modal-btn-container">
+      <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+      <button type="button" id="modal-next" class="modal-next btn">Next</button>
+  </div>
+</div>`;
 };
-
-
-function createModal(contact) {
-    function createDiv(className) {
-      const div = document.createElement("div");
-      div.className = className;
-      return div;
-    }
-    function createBtn(id, className, text) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.id = id;
-      btn.className = className;
-      btn.innerHTML = `${text}`;
-      return btn;
-    }
-    const modalContainer = createDiv("modal-container");
-    const modalDiv = createDiv("modal");
-    const infoContainer = createDiv("modal-info-container");
-    const btnContainer = createDiv("modal-btn-container");
-    const closeBtn = createBtn(
-      "modal-close-btn",
-      "modal-close-btn",
-      "<strong>X</strong>"
-    );
-  
-    /* Exceeds */
-    btnContainer.innerHTML = `
-          <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-          <button type="button" id="modal-next" class="modal-next btn">Next</button>
-    `;
-  
-    infoContainer.innerHTML = `
-          <img class="modal-img" src="${contact.image}" alt="profile picture">
-          <h3 id="name" class="modal-name cap">${contact.name}</h3>
-          <p class="modal-text">${contact.email}</p>
-          <p class="modal-text cap">${contact.city}</p>
-          <hr>
-          <p class="modal-text">${contact.cell}</p>
-          <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
-          <p class="modal-text">Birthday:${contact.dob}</p>
-      `;
-    modalDiv.appendChild(closeBtn);
-    modalDiv.appendChild(infoContainer);
-    modalContainer.appendChild(modalDiv);
-    modalContainer.appendChild(btnContainer);
-    modalContainer.classList.toggle('show-modal');
-    galleryDiv.insertAdjacentElement("afterend", modalContainer);
-    modal = modalContainer;
-    closeModal = closeBtn;
-    console.log(modalContainer);
-  }
 
 const loadPage = async () => {
   try {
     const contactsList = await randomUsers(randomUsersURL);
     const contactCards = await generateHTML(contactsList);
-    contactModal();
+    galleryDiv.addEventListener("click", async (e) => {
+      for (let i = 0; i < cards.length; i++) {
+        if (cards[i].contains(e.target)) {
+          const selectedContact = contactsList[i];
+          const contactModal = await createModal(selectedContact);
+          function insertModal() {
+            galleryDiv.insertAdjacentHTML("afterend", contactModal);
+          }
+          insertModal();
+        }
+      }
+      function modalTogle() {
+        const modalContainer = document.querySelector('.modal-container');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalPrevBtn = document.getElementById('modal-prev');
+        const modalNextBtn = document.getElementById('modal-next');
+      
+        if(modalCloseBtn === e.target) {
+          console.log('me cierro');
+          modalContainer.remove()
+        }
+      }      
+    });
+
     return contactCards;
   } catch (err) {
     throw err;
@@ -179,5 +107,3 @@ const loadPage = async () => {
 };
 
 loadPage();
-contactModal(randomUsers[0])
-
