@@ -1,6 +1,10 @@
 const randomUsersURL = "https://randomuser.me/api/?results=12";
 const galleryDiv = document.getElementById("gallery");
 const cards = galleryDiv.children;
+const modalContainer = document.querySelector('.modal-container');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+const modalPrevBtn = document.getElementById('modal-prev');
+const modalNextBtn = document.getElementById('modal-next');
 
 const usersJSON = async (url) => {
   try {
@@ -71,6 +75,13 @@ const createModal = (contact) => {
 </div>`;
 };
 
+function modalTogle() {    
+  if(modalCloseBtn === e.target) {
+    console.log('me cierro');
+    modalContainer.remove()
+  }
+}
+
 const loadPage = async () => {
   try {
     const contactsList = await randomUsers(randomUsersURL);
@@ -85,20 +96,11 @@ const loadPage = async () => {
           }
           insertModal();
         }
-      }
-      function modalTogle() {
-        const modalContainer = document.querySelector('.modal-container');
-        const modalCloseBtn = document.getElementById('modal-close-btn');
-        const modalPrevBtn = document.getElementById('modal-prev');
-        const modalNextBtn = document.getElementById('modal-next');
-      
-        if(modalCloseBtn === e.target) {
-          console.log('me cierro');
-          modalContainer.remove()
-        }
-      }      
+      }    
     });
-
+    modalContainer.addEventListener('click', () => {
+      
+    });
     return contactCards;
   } catch (err) {
     throw err;
