@@ -112,14 +112,16 @@ const selectedContact = () => {
 };
 
 function insertModal(contact) {
-  
+  const contactModal = createModal(contact);
+  galleryDiv.insertAdjacentHTML("afterend", contactModal);
+  modalHandler();
 }
 
 const loadPage = async () => {
   try {
     const contactsList = await randomUsers(randomUsersURL);
     const contactCards = await generateHTML(contactsList);
-    insertModal(contactsList);        ;
+    insertModal(contactsList[0]);        ;
   
     return contactCards;
   } catch (err) {
