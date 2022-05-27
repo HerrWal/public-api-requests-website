@@ -81,33 +81,45 @@ const modalHandler = async () => {
   const modalCloseBtn = document.getElementById('modal-close-btn');
   const modalPrevBtn = document.getElementById('modal-prev');
   const modalNextBtn = document.getElementById('modal-next');
-  modalContainer.addEventListener('click', (e) => {
-    console.log(e.target);
-  });
   modalCloseBtn.addEventListener('click', (e) => {
     if(modalCloseBtn.innerText === e.target.innerText) {
       modalContainer.remove()
     }
   });
+  modalPrevBtn.addEventListener('click', () => {
+    console.log('Previous contact');
+  });
+  modalNextBtn.addEventListener('click', () => {
+    console.log('Next contact');
+  });
 };
 
-function insertModal() {
-  body.addEventListener("click", async (e) => {
-    for (let i = 0; i < cards.length; i++) {
-      if (cards[i].contains(e.target)) {
-        const selectedContact = contactsList[i];
-        const contactModal = createModal(selectedContact);
-        galleryDiv.insertAdjacentHTML("afterend", contactModal);
-        modalHandler(i);
-      }
-    }      
-  }); 
+// function insertModal(contacts) {
+//   body.addEventListener("click", async (e) => {
+//     for (let i = 0; i < cards.length; i++) {
+//       if (cards[i].contains(e.target)) {
+//         const selectedContact = contacts[i];
+//         const contactModal = createModal(selectedContact);
+//         galleryDiv.insertAdjacentHTML("afterend", contactModal);
+//         modalHandler();
+//       }
+//     }      
+//   }); 
+// }
+
+const selectedContact = () => {
+
+};
+
+function insertModal(contact) {
+  
 }
+
 const loadPage = async () => {
   try {
     const contactsList = await randomUsers(randomUsersURL);
     const contactCards = await generateHTML(contactsList);
-    insertModal()        ;
+    insertModal(contactsList);        ;
   
     return contactCards;
   } catch (err) {
