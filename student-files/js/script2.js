@@ -1,10 +1,7 @@
 const randomUsersURL = "https://randomuser.me/api/?results=12";
 const galleryDiv = document.getElementById("gallery");
 const cards = galleryDiv.children;
-const modalContainer = document.querySelector('.modal-container');
-const modalCloseBtn = document.getElementById('modal-close-btn');
-const modalPrevBtn = document.getElementById('modal-prev');
-const modalNextBtn = document.getElementById('modal-next');
+const body = document.querySelector('body');
 
 const usersJSON = async (url) => {
   try {
@@ -75,37 +72,52 @@ const createModal = (contact) => {
 </div>`;
 };
 
-function modalTogle() {    
-  if(modalCloseBtn === e.target) {
-    console.log('me cierro');
-    modalContainer.remove()
-  }
+function modalTogle() { 
+
 }
 
+const modalHandler = async () => {
+  const modalContainer = document.querySelector('.modal-container');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const modalPrevBtn = document.getElementById('modal-prev');
+  const modalNextBtn = document.getElementById('modal-next');
+  modalContainer.addEventListener('click', (e) => {
+    console.log(e.target);
+  });
+  modalCloseBtn.addEventListener('click', (e) => {
+    if(modalCloseBtn.innerText === e.target.innerText) {
+      modalContainer.remove()
+    }
+  });
+};
+
+function insertModal() {
+  body.addEventListener("click", async (e) => {
+    for (let i = 0; i < cards.length; i++) {
+      if (cards[i].contains(e.target)) {
+        const selectedContact = contactsList[i];
+        const contactModal = createModal(selectedContact);
+        galleryDiv.insertAdjacentHTML("afterend", contactModal);
+        modalHandler(i);
+      }
+    }      
+  }); 
+}
 const loadPage = async () => {
   try {
     const contactsList = await randomUsers(randomUsersURL);
     const contactCards = await generateHTML(contactsList);
-    galleryDiv.addEventListener("click", async (e) => {
-      for (let i = 0; i < cards.length; i++) {
-        if (cards[i].contains(e.target)) {
-          const selectedContact = contactsList[i];
-          const contactModal = await createModal(selectedContact);
-          function insertModal() {
-            galleryDiv.insertAdjacentHTML("afterend", contactModal);
-          }
-          insertModal();
-        }
-      }    
-    });
-    modalContainer.addEventListener('click', () => {
-      
-    });
+    insertModal()        ;
+  
     return contactCards;
   } catch (err) {
     throw err;
     console.error(err);
   }
 };
+
+async function modal() {
+  await modalHandler()
+}
 
 loadPage();
