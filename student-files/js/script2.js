@@ -107,12 +107,19 @@ const modalHandler = async () => {
 //   }); 
 // }
 
-const selectedContact = () => {
-
+const contactSelection = (contacts) => {
+  body.addEventListener('click', (e) => {
+    for (let i = 0; i < cards.length; i++) {
+      if (cards[i].contains(e.target)) {
+        const selected = contacts[i];
+        return selected
+      }
+    }
+  });
 };
 
-function insertModal(contact) {
-  const contactModal = createModal(contact);
+function insertModal(data) {
+  const contactModal = createModal(data);
   galleryDiv.insertAdjacentHTML("afterend", contactModal);
   modalHandler();
 }
@@ -121,7 +128,8 @@ const loadPage = async () => {
   try {
     const contactsList = await randomUsers(randomUsersURL);
     const contactCards = await generateHTML(contactsList);
-    insertModal(contactsList[0]);        ;
+    const selectedContact = contactSelection(contactsList);
+    insertModal(selectedContact);
   
     return contactCards;
   } catch (err) {
