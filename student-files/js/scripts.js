@@ -1,43 +1,21 @@
-const randomUserURL = "https://randomuser.me/api/?results=12";
-const searchContainer = document.getElementsByClassName("search-container");
+const randomUsersURL = "https://randomuser.me/api/?results=12";
 const galleryDiv = document.getElementById("gallery");
-const body = document.querySelector("body");
-let modal;
-let closeModal;
-let employees = {};
+const cards = document.getElementsByClassName('card');
+const body = document.querySelector('body');
 
-/**
- * Search markup:
- */
-
-// You can use the commented out markup below as a template
-// for your search feature and append it to this `search-container` div.
-
-// IMPORTANT: Altering the arrangement of the markup and the
-// attributes used may break the styles or functionality.
-
-// <form action="#" method="get">
-//     <input type="search" id="search-input" class="search-input" placeholder="Search...">
-//     <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
-// </form>
-
-/**
- * Get and display 12 random users
- */
-
-async function getJSON(url) {
+const usersJSON = async (url) => {
   try {
     const response = await fetch(url);
     return await response.json();
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    throw err;
     console.error("Uh oh, something has gone wrong!");
   }
-}
+};
 
-async function getRandomUsers(url) {
-  const userJSON = await getJSON(url);
-  const contactInfo = userJSON.results.map((contact) => {
+const randomUsers = async (url) => {
+  const userJSON = await usersJSON(url);
+  const contactsInfo = userJSON.results.map((contact) => {
     const image = contact.picture.large.toString();
     const name = `${contact.name.first} ${contact.name.last}`;
     const email = contact.email;
@@ -49,15 +27,15 @@ async function getRandomUsers(url) {
     const dob = contact.dob.date.slice(0, 9);
     return { image, name, email, city, cell, address, street, postCode, dob };
   });
+  console.log(contactsInfo);
+  return contactsInfo;
+};
 
-  /**
-   * Gallery markup
-   */
-  function generateHTML(contactInfo) {
-    contactInfo.map((contact) => {
-      const card = document.createElement("div");
-      card.classList.add("card");
-      card.innerHTML = `
+function generateHTML(contactInfo) {
+  contactInfo.map((contact) => {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.innerHTML = `
                 <div class="card-img-container">
                     <img class="card-img" src="${contact.image}" alt="profile picture">
                 </div>
@@ -67,49 +45,16 @@ async function getRandomUsers(url) {
                     <p class="card-text cap">${contact.city}</p>
                 </div>
             `;
-      galleryDiv.insertAdjacentElement("beforeend", card);
-    });
-  }
-  employees = contactInfo;
-  console.log(contactInfo);
-  generateHTML(contactInfo);
+
+    galleryDiv.insertAdjacentElement("beforeend", card);
+  });
 }
 
-/**
- * Modal markup
- */
-
 function createModal(contact) {
-  function createDiv(className) {
-    const div = document.createElement("div");
-    div.className = className;
-    return div;
-  }
-  function createBtn(id, className, text) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.id = id;
-    btn.className = className;
-    btn.innerHTML = `${text}`;
-    return btn;
-  }
-  const modalContainer = createDiv("modal-container");
-  const modalDiv = createDiv("modal");
-  const infoContainer = createDiv("modal-info-container");
-  const btnContainer = createDiv("modal-btn-container");
-  const closeBtn = createBtn(
-    "modal-close-btn",
-    "modal-close-btn",
-    "<strong>X</strong>"
-  );
-
-  /* Exceeds */
-  btnContainer.innerHTML = `
-        <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-        <button type="button" id="modal-next" class="modal-next btn">Next</button>
-    `;
-
-  infoContainer.innerHTML = `
+  return `<div class="modal-container">
+  <div class="modal">
+      <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+        <div class="modal-info-container">
         <img class="modal-img" src="${contact.image}" alt="profile picture">
         <h3 id="name" class="modal-name cap">${contact.name}</h3>
         <p class="modal-text">${contact.email}</p>
@@ -118,43 +63,67 @@ function createModal(contact) {
         <p class="modal-text">${contact.cell}</p>
         <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
         <p class="modal-text">Birthday:${contact.dob}</p>
-    `;
-  modalDiv.appendChild(closeBtn);
-  modalDiv.appendChild(infoContainer);
-  modalContainer.appendChild(modalDiv);
-  modalContainer.appendChild(btnContainer);
-  modalContainer.classList.toggle('show-modal');
-  galleryDiv.insertAdjacentElement("afterend", modalContainer);
-  modal = modalContainer;
-  closeModal = closeBtn;
-  console.log(modalContainer);
-}
+      </div>
+  </div>
+  <div class="modal-btn-container">
+      <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+      <button type="button" id="modal-next" class="modal-next btn">Next</button>
+  </div>
+</div>`;
+};
 
-/**
- * modal interactivity
- */
-
-function showModalCard() {
-    const cards = galleryDiv.children;
-    for (let i = 0; i < cards.length; i++) {
-      if (cards[i].contains(event.target)) {
-        console.log(employees[i]);
-        createModal(employees[i]);
-      }
+function modalHandler(next, prev) {
+  const modalContainer = document.querySelector('.modal-container');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const modalPrevBtn = document.getElementById('modal-prev');
+  const modalNextBtn = document.getElementById('modal-next');
+  modalCloseBtn.addEventListener('click', (e) => {
+    if(modalCloseBtn.innerText === e.target.innerText) {
+      modalContainer.remove();
     }
+  });
+  modalPrevBtn.addEventListener('click', () => {
+    console.log('Previous contact');
+    modalContainer.remove();
+    const modal = createModal(prev)
+    galleryDiv.insertAdjacentHTML("afterend", modal)
+  });
+  modalNextBtn.addEventListener('click', () => {
+    console.log('Next contact');
+    modalContainer.remove();
+    const modal = createModal(next)
+    galleryDiv.insertAdjacentHTML("afterend", modal)
+  });
+};
+
+function insertModal(contacts) {
+  body.addEventListener("click", (e) => {
+    for (let i = 0; i < cards.length; i++) {
+      if (cards[i].contains(e.target)) {
+        const selectedContact = contacts[i];
+        const nextContact = contacts[i+1];
+        const prevContact = contacts[i-1];
+        console.log(contacts.indexOf(selectedContact));
+        const contactModal = createModal(selectedContact);
+        galleryDiv.insertAdjacentHTML("afterend", contactModal);
+        modalHandler(nextContact, prevContact);
+      }
+    }     
+  }); 
 }
 
-function toggleModal() {    
-    modal.classList.toggle('show-modal');
-}
 
-getRandomUsers(randomUserURL);
+const loadPage = async () => {
+  try {
+    const contactsList = await randomUsers(randomUsersURL);
+    const contactCards = await generateHTML(contactsList);
+    insertModal(contactsList)
+  
+    return contactCards;
+  } catch (err) {
+    throw err;
+    console.error(err);
+  }
+};
 
-galleryDiv.addEventListener("click", () => {
-    showModalCard();
-    console.log(closeModal);
-    closeModal.addEventListener("click", () => {
-        console.log(closeModal)
-        modal.style.visibility = 'hidden';
-    });
-});
+loadPage();
