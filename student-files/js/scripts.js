@@ -2,6 +2,8 @@ const randomUsersURL = "https://randomuser.me/api/?results=12";
 const galleryDiv = document.getElementById("gallery");
 const cards = document.getElementsByClassName('card');
 const body = document.querySelector('body');
+let selectedContact;
+let selectedContactIndex;
 
 const usersJSON = async (url) => {
   try {
@@ -72,52 +74,44 @@ function createModal(contact) {
 </div>`;
 };
 
-function modalHandler(next, prev) {
+function modalHandler(list, contact, index) {
+  const contactModal = createModal(contact);
+  galleryDiv.insertAdjacentHTML("afterend", contactModal);
   const modalContainer = document.querySelector('.modal-container');
   const modalCloseBtn = document.getElementById('modal-close-btn');
   const modalPrevBtn = document.getElementById('modal-prev');
-  const modalNextBtn = document.getElementById('modal-next');
-  modalCloseBtn.addEventListener('click', (e) => {
-    if(modalCloseBtn.innerText === e.target.innerText) {
-      modalContainer.remove();
-    }
-  });
+  const modalNextBtn = document.getElementById('modal-next');  
+  if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', (e) => {
+      if(modalCloseBtn.innerText === e.target.innerText) {
+        modalContainer.remove();
+      }
+    });
+  }  
   modalPrevBtn.addEventListener('click', () => {
     console.log('Previous contact');
-    modalContainer.remove();
-    const modal = createModal(prev)
-    galleryDiv.insertAdjacentHTML("afterend", modal)
+    modalContainer.remove();    
   });
   modalNextBtn.addEventListener('click', () => {
     console.log('Next contact');
     modalContainer.remove();
-    const modal = createModal(next)
-    galleryDiv.insertAdjacentHTML("afterend", modal)
-  });
+    galleryDiv.insertAdjacentHTML("afterend", createModal(list[index + 1]));
+  });  
 };
-
-function insertModal(contacts) {
-  body.addEventListener("click", (e) => {
-    for (let i = 0; i < cards.length; i++) {
-      if (cards[i].contains(e.target)) {
-        const selectedContact = contacts[i];
-        const nextContact = contacts[i+1];
-        const prevContact = contacts[i-1];
-        console.log(contacts.indexOf(selectedContact));
-        const contactModal = createModal(selectedContact);
-        galleryDiv.insertAdjacentHTML("afterend", contactModal);
-        modalHandler(nextContact, prevContact);
-      }
-    }     
-  }); 
-}
-
 
 const loadPage = async () => {
   try {
     const contactsList = await randomUsers(randomUsersURL);
     const contactCards = await generateHTML(contactsList);
-    insertModal(contactsList)
+    for (let i = 0; i < cards.length; i++) {
+      cards[i].addEventListener("click", (e) => {
+        if (cards[i].contains(e.target)) {
+          selectedContact = contactsList[i];
+          selectedContactIndex = i;
+          modalHandler(contactsList, selectedContact, selectedContactIndex);
+        }
+      });
+    }
   
     return contactCards;
   } catch (err) {
