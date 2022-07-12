@@ -37,7 +37,7 @@ function generateHTML(contactInfo) {
   contactInfo.map((contact, index) => {
     const card = document.createElement("div");
     card.classList.add("card");
-    card.dataset.employeeIndex = `${index + 1}`;
+    card.dataset.employeeIndex = `${index}`;
     card.innerHTML = `
                 <div class="card-img-container">
                     <img class="card-img" src="${contact.image}" alt="profile picture">
@@ -62,25 +62,45 @@ This function will create the modal, append it to the html and set the listeners
 for each of the buttons
 */
 function createModal(contact) {
-  return `<div class="modal-container">
-  <div class="modal">
-      <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-        <div class="modal-info-container">
-        <img class="modal-img" src="${contact.image}" alt="profile picture">
-        <h3 id="name" class="modal-name cap">${contact.name}</h3>
-        <p class="modal-text">${contact.email}</p>
-        <p class="modal-text cap">${contact.city}</p>
-        <hr>
-        <p class="modal-text">${contact.cell}</p>
-        <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
-        <p class="modal-text">Birthday:${contact.dob}</p>
-      </div>
-  </div>
-  <div class="modal-btn-container">
-      <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-      <button type="button" id="modal-next" class="modal-next btn">Next</button>
-  </div>
-</div>`;
+  const modal = `<div class="modal-container">
+    <div class="modal">
+        <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+          <div class="modal-info-container">
+          <img class="modal-img" src="${contact.image}" alt="profile picture">
+          <h3 id="name" class="modal-name cap">${contact.name}</h3>
+          <p class="modal-text">${contact.email}</p>
+          <p class="modal-text cap">${contact.city}</p>
+          <hr>
+          <p class="modal-text">${contact.cell}</p>
+          <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
+          <p class="modal-text">Birthday:${contact.dob}</p>
+        </div>
+    </div>
+    <div class="modal-btn-container">
+        <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+        <button type="button" id="modal-next" class="modal-next btn">Next</button>
+    </div>
+  </div>`;
+  galleryDiv.insertAdjacentHTML("afterend", modal)
+  const modalContainer = document.querySelector('.modal-container');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const modalPrevBtn = document.getElementById('modal-prev');
+  const modalNextBtn = document.getElementById('modal-next');  
+  if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', (e) => {
+      if(modalCloseBtn.innerText === e.target.innerText) {
+        modalContainer.remove();
+      }
+    });
+  }  
+  modalPrevBtn.addEventListener('click', () => {
+    console.log('Previous contact');
+    modalContainer.remove();    
+  });
+  modalNextBtn.addEventListener('click', () => {
+    console.log('Next contact');
+    modalContainer.remove();    
+  });  
 };
 
 function modalHandler(list, contact, index) {
@@ -115,7 +135,7 @@ const loadPage = async () => {
     galleryDiv.addEventListener("click", e => {
       for (let card of cards) {
         if (card.contains(e.target)) {
-          console.log(card.dataset.employeeIndex)
+          createModal(contactsList[card.dataset.employeeIndex])
         }
       }      
     });
