@@ -34,9 +34,10 @@ const randomUsers = async (url) => {
 };
 
 function generateHTML(contactInfo) {
-  contactInfo.map((contact) => {
+  contactInfo.map((contact, index) => {
     const card = document.createElement("div");
     card.classList.add("card");
+    card.dataset.employeeIndex = `${index + 1}`;
     card.innerHTML = `
                 <div class="card-img-container">
                     <img class="card-img" src="${contact.image}" alt="profile picture">
@@ -51,7 +52,15 @@ function generateHTML(contactInfo) {
     galleryDiv.insertAdjacentElement("beforeend", card);
   });
 }
+/*
+Attach a click to the entire gallery
+check if it is a card 
+and if it is we can grab it's data attribute, the index
+then use that to create and display the modal. This could be done by a function
 
+This function will create the modal, append it to the html and set the listeners
+for each of the buttons
+*/
 function createModal(contact) {
   return `<div class="modal-container">
   <div class="modal">
@@ -103,16 +112,13 @@ const loadPage = async () => {
   try {
     const contactsList = await randomUsers(randomUsersURL);
     const contactCards = await generateHTML(contactsList);
-    for (let i = 0; i < cards.length; i++) {
-      cards[i].addEventListener("click", (e) => {
-        if (cards[i].contains(e.target)) {
-          selectedContact = contactsList[i];
-          selectedContactIndex = i;
-          modalHandler(contactsList, selectedContact, selectedContactIndex);
+    galleryDiv.addEventListener("click", e => {
+      for (let card of cards) {
+        if (card.contains(e.target)) {
+          console.log(card.dataset.employeeIndex)
         }
-      });
-    }
-  
+      }      
+    });
     return contactCards;
   } catch (err) {
     throw err;
