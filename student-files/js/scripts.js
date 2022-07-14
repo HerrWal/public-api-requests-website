@@ -61,6 +61,7 @@ then use that to create and display the modal. This could be done by a function
 This function will create the modal, append it to the html and set the listeners
 for each of the buttons
 */
+<<<<<<< HEAD
 function createModal(contacts, index) {
   const modal = `<div class="modal-container">
     <div class="modal">
@@ -81,6 +82,29 @@ function createModal(contacts, index) {
         <button type="button" id="modal-next" class="modal-next btn">Next</button>
     </div>
   </div>`;
+=======
+function createModal(contacts, employeeIndex) {
+  const modal =
+    `<div class="modal-container">
+      <div class="modal">
+          <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+            <div class="modal-info-container">
+            <img class="modal-img" src="${contacts[employeeIndex].image}" alt="profile picture">
+            <h3 id="name" class="modal-name cap">${contacts[employeeIndex].name}</h3>
+            <p class="modal-text">${contacts[employeeIndex].email}</p>
+            <p class="modal-text cap">${contacts[employeeIndex].city}</p>
+            <hr>
+            <p class="modal-text">${contacts[employeeIndex].cell}</p>
+            <p class="modal-text">${contacts[employeeIndex].street}, ${contacts[employeeIndex].city} ${contacts[employeeIndex].postCode}</p>
+            <p class="modal-text">Birthday:${contacts[employeeIndex].dob}</p>
+          </div>
+      </div>
+      <div class="modal-btn-container">
+          <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+          <button type="button" id="modal-next" class="modal-next btn">Next</button>
+      </div>
+    </div>`;
+>>>>>>> 8705db70c1c20e92e6da1b8ba53cb84eb73fedda
   galleryDiv.insertAdjacentHTML("afterend", modal)
   const modalContainer = document.querySelector('.modal-container');
   const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -100,31 +124,6 @@ function createModal(contacts, index) {
   modalNextBtn.addEventListener('click', () => {
     console.log('Next contact');
     modalContainer.remove();    
-  });  
-};
-
-function modalHandler(list, contact, index) {
-  const contactModal = createModal(contact);
-  galleryDiv.insertAdjacentHTML("afterend", contactModal);
-  const modalContainer = document.querySelector('.modal-container');
-  const modalCloseBtn = document.getElementById('modal-close-btn');
-  const modalPrevBtn = document.getElementById('modal-prev');
-  const modalNextBtn = document.getElementById('modal-next');  
-  if (modalCloseBtn) {
-    modalCloseBtn.addEventListener('click', (e) => {
-      if(modalCloseBtn.innerText === e.target.innerText) {
-        modalContainer.remove();
-      }
-    });
-  }  
-  modalPrevBtn.addEventListener('click', () => {
-    console.log('Previous contact');
-    modalContainer.remove();    
-  });
-  modalNextBtn.addEventListener('click', () => {
-    console.log('Next contact');
-    modalContainer.remove();
-    galleryDiv.insertAdjacentHTML("afterend", createModal(list[index + 1]));
   });  
 };
 
