@@ -61,19 +61,19 @@ then use that to create and display the modal. This could be done by a function
 This function will create the modal, append it to the html and set the listeners
 for each of the buttons
 */
-function createModal(contact) {
+function createModal(contacts, index) {
   const modal = `<div class="modal-container">
     <div class="modal">
         <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
           <div class="modal-info-container">
-          <img class="modal-img" src="${contact.image}" alt="profile picture">
-          <h3 id="name" class="modal-name cap">${contact.name}</h3>
-          <p class="modal-text">${contact.email}</p>
-          <p class="modal-text cap">${contact.city}</p>
+          <img class="modal-img" src="${contacts[index].image}" alt="profile picture">
+          <h3 id="name" class="modal-name cap">${contacts[index].name}</h3>
+          <p class="modal-text">${contacts[index].email}</p>
+          <p class="modal-text cap">${contacts[index].city}</p>
           <hr>
-          <p class="modal-text">${contact.cell}</p>
-          <p class="modal-text">${contact.street}, ${contact.city} ${contact.postCode}</p>
-          <p class="modal-text">Birthday:${contact.dob}</p>
+          <p class="modal-text">${contacts[index].cell}</p>
+          <p class="modal-text">${contacts[index].street}, ${contacts[index].city} ${contacts[index].postCode}</p>
+          <p class="modal-text">Birthday:${contacts[index].dob}</p>
         </div>
     </div>
     <div class="modal-btn-container">
@@ -135,7 +135,7 @@ const loadPage = async () => {
     galleryDiv.addEventListener("click", e => {
       for (let card of cards) {
         if (card.contains(e.target)) {
-          createModal(contactsList[card.dataset.employeeIndex])
+          createModal(contactsList, card.dataset.employeeIndex)
         }
       }      
     });
