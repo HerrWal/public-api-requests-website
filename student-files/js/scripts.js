@@ -50,15 +50,7 @@ function generateHTML(contactInfo) {
     galleryDiv.insertAdjacentElement("beforeend", card);
   });
 }
-/*
-Attach a click to the entire gallery
-check if it is a card 
-and if it is we can grab it's data attribute, the index
-then use that to create and display the modal. This could be done by a function
 
-This function will create the modal, append it to the html and set the listeners
-for each of the buttons
-*/
 function createModal(index) {
   const modal =
     `<div class="modal-container">
