@@ -95,13 +95,12 @@ function createModal(index) {
   modalPrevBtn.addEventListener('click', () => {
     console.log('Previous contact');
     modalContainer.remove(); 
-    createModal(selectedContactIndex --)
+    createModal(--index);
   });
   modalNextBtn.addEventListener('click', () => {
     console.log('Next contact');    
     modalContainer.remove();
-    console.log(selectedContactIndex);
-    createModal(selectedContactIndex ++)
+    createModal(++index);
   }); 
 }
 
