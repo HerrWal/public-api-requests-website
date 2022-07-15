@@ -2,7 +2,7 @@ const randomUsersURL = "https://randomuser.me/api/?results=12";
 const galleryDiv = document.getElementById("gallery");
 const cards = document.getElementsByClassName('card');
 const body = document.querySelector('body');
-let selectedContact;
+let contactsList;
 let selectedContactIndex;
 
 const usersJSON = async (url) => {
@@ -29,7 +29,6 @@ const randomUsers = async (url) => {
     const dob = contact.dob.date.slice(0, 9);
     return { image, name, email, city, cell, address, street, postCode, dob };
   });
-  console.log(contactsInfo);
   return contactsInfo;
 };
 
@@ -48,7 +47,6 @@ function generateHTML(contactInfo) {
                     <p class="card-text cap">${contact.city}</p>
                 </div>
             `;
-
     galleryDiv.insertAdjacentElement("beforeend", card);
   });
 }
@@ -61,42 +59,20 @@ then use that to create and display the modal. This could be done by a function
 This function will create the modal, append it to the html and set the listeners
 for each of the buttons
 */
-<<<<<<< HEAD
-function createModal(contacts, index) {
-  const modal = `<div class="modal-container">
-    <div class="modal">
-        <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-          <div class="modal-info-container">
-          <img class="modal-img" src="${contacts[index].image}" alt="profile picture">
-          <h3 id="name" class="modal-name cap">${contacts[index].name}</h3>
-          <p class="modal-text">${contacts[index].email}</p>
-          <p class="modal-text cap">${contacts[index].city}</p>
-          <hr>
-          <p class="modal-text">${contacts[index].cell}</p>
-          <p class="modal-text">${contacts[index].street}, ${contacts[index].city} ${contacts[index].postCode}</p>
-          <p class="modal-text">Birthday:${contacts[index].dob}</p>
-        </div>
-    </div>
-    <div class="modal-btn-container">
-        <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-        <button type="button" id="modal-next" class="modal-next btn">Next</button>
-    </div>
-  </div>`;
-=======
-function createModal(contacts, employeeIndex) {
+function createModal(index) {
   const modal =
     `<div class="modal-container">
       <div class="modal">
           <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
             <div class="modal-info-container">
-            <img class="modal-img" src="${contacts[employeeIndex].image}" alt="profile picture">
-            <h3 id="name" class="modal-name cap">${contacts[employeeIndex].name}</h3>
-            <p class="modal-text">${contacts[employeeIndex].email}</p>
-            <p class="modal-text cap">${contacts[employeeIndex].city}</p>
+            <img class="modal-img" src="${contactsList[index].image}" alt="profile picture">
+            <h3 id="name" class="modal-name cap">${contactsList[index].name}</h3>
+            <p class="modal-text">${contactsList[index].email}</p>
+            <p class="modal-text cap">${contactsList[index].city}</p>
             <hr>
-            <p class="modal-text">${contacts[employeeIndex].cell}</p>
-            <p class="modal-text">${contacts[employeeIndex].street}, ${contacts[employeeIndex].city} ${contacts[employeeIndex].postCode}</p>
-            <p class="modal-text">Birthday:${contacts[employeeIndex].dob}</p>
+            <p class="modal-text">${contactsList[index].cell}</p>
+            <p class="modal-text">${contactsList[index].street}, ${contactsList[index].city} ${contactsList[index].postCode}</p>
+            <p class="modal-text">Birthday:${contactsList[index].dob}</p>
           </div>
       </div>
       <div class="modal-btn-container">
@@ -104,8 +80,7 @@ function createModal(contacts, employeeIndex) {
           <button type="button" id="modal-next" class="modal-next btn">Next</button>
       </div>
     </div>`;
->>>>>>> 8705db70c1c20e92e6da1b8ba53cb84eb73fedda
-  galleryDiv.insertAdjacentHTML("afterend", modal)
+  galleryDiv.insertAdjacentHTML("afterend",modal);
   const modalContainer = document.querySelector('.modal-container');
   const modalCloseBtn = document.getElementById('modal-close-btn');
   const modalPrevBtn = document.getElementById('modal-prev');
@@ -119,22 +94,26 @@ function createModal(contacts, employeeIndex) {
   }  
   modalPrevBtn.addEventListener('click', () => {
     console.log('Previous contact');
-    modalContainer.remove();    
+    modalContainer.remove(); 
+    createModal(selectedContactIndex --)
   });
   modalNextBtn.addEventListener('click', () => {
-    console.log('Next contact');
-    modalContainer.remove();    
-  });  
-};
+    console.log('Next contact');    
+    modalContainer.remove();
+    console.log(selectedContactIndex);
+    createModal(selectedContactIndex ++)
+  }); 
+}
 
 const loadPage = async () => {
   try {
-    const contactsList = await randomUsers(randomUsersURL);
+    contactsList = await randomUsers(randomUsersURL);
     const contactCards = await generateHTML(contactsList);
     galleryDiv.addEventListener("click", e => {
       for (let card of cards) {
         if (card.contains(e.target)) {
-          createModal(contactsList, card.dataset.employeeIndex)
+          selectedContactIndex = card.dataset.employeeIndex;
+          createModal(selectedContactIndex);
         }
       }      
     });
