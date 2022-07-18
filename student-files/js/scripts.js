@@ -1,4 +1,4 @@
-const randomUsersURL = "https://randomuser.me/api/?results=12";
+const randomUsersURL = "https://randomuser.me/api/?results=12&nat=us";
 const galleryDiv = document.getElementById("gallery");
 const cards = document.getElementsByClassName('card');
 const body = document.querySelector('body');
@@ -26,7 +26,7 @@ const randomUsers = async (url) => {
     const address = contact.location.street;
     const street = `${address.number} ${address.name}`;
     const postCode = contact.location.postcode;
-    const dob = contact.dob.date.slice(0, 9);
+    const dob = ` ${contact.dob.date.slice(5,10)}/${contact.dob.date.slice(0, 4)}`.replace('-', '/');
     return { image, name, email, city, cell, address, street, postCode, dob };
   });
   return contactsInfo;
@@ -49,6 +49,17 @@ function generateHTML(contactInfo) {
             `;
     galleryDiv.insertAdjacentElement("beforeend", card);
   });
+}
+
+function createSearchBar() {
+  const searchBar = `                        
+    <form action="#" method="get">
+      <input type="search" id="search-input" class="search-input" placeholder="Search...">
+      <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+    </form>
+  `;
+  const searchContainer = document.querySelector('.search-container');
+  searchContainer.insertAdjacentHTML("afterbegin", searchContainer);
 }
 
 function createModal(index) {
@@ -108,6 +119,7 @@ const loadPage = async () => {
         }
       }      
     });
+    createSearchBar();
     return contactCards;
   } catch (err) {
     throw err;
