@@ -62,6 +62,7 @@ function createSearchBar() {
   searchContainer.insertAdjacentHTML("afterbegin", searchContainer);
 }
 
+
 function createModal(index) {
   const modal =
     `<div class="modal-container">
