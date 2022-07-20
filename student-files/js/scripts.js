@@ -92,7 +92,7 @@ function createModal(index) {
         modalContainer.remove();
       }
     });
-  } 
+  }
   switch(index) {
     case 0:
       console.log(index);
