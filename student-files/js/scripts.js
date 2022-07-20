@@ -52,16 +52,13 @@ function generateHTML(contactInfo) {
 }
 
 function createSearchBar() {
-  const searchBar = `                        
+  const searchContainer = document.querySelector('.search-container');
+  searchContainer.innerHTML = `                        
     <form action="#" method="get">
       <input type="search" id="search-input" class="search-input" placeholder="Search...">
       <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
     </form>`;
-  const searchContainer = document.querySelector('.search-container');
-  console.log(searchBar);
-  searchContainer.insertAdjacentHTML("beforeend", searchContainer);
 }
-
 
 function createModal(index) {
   const modal =
@@ -104,6 +101,9 @@ function createModal(index) {
   modalNextBtn.addEventListener('click', () => {
     console.log('Next contact');    
     modalContainer.remove();
+    if (index) {
+      
+    }
     createModal(++index);
   }); 
 }
