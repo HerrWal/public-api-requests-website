@@ -81,7 +81,7 @@ function createModal(index) {
           <button type="button" id="modal-next" class="modal-next btn">Next</button>
       </div>
     </div>`;
-  galleryDiv.insertAdjacentHTML("afterend",modal);
+  galleryDiv.insertAdjacentHTML("afterend",modal);  
   const modalContainer = document.querySelector('.modal-container');
   const modalCloseBtn = document.getElementById('modal-close-btn');
   const modalPrevBtn = document.getElementById('modal-prev');
@@ -92,7 +92,16 @@ function createModal(index) {
         modalContainer.remove();
       }
     });
-  }  
+  } 
+  switch(index) {
+    case 0:
+      console.log(index);
+      modalPrevBtn.remove();
+      break;
+    case 11:
+      console.log(index);
+      modalNextBtn.remove();
+  }
   modalPrevBtn.addEventListener('click', () => {
     console.log('Previous contact');
     modalContainer.remove(); 
@@ -101,11 +110,8 @@ function createModal(index) {
   modalNextBtn.addEventListener('click', () => {
     console.log('Next contact');    
     modalContainer.remove();
-    if (index) {
-      
-    }
     createModal(++index);
-  }); 
+  });   
 }
 
 const loadPage = async () => {
