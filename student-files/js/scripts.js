@@ -93,15 +93,18 @@ function createModal(index) {
       }
     });
   }
-  switch(index) {
-    case 0:
-      console.log(index);
-      modalPrevBtn.remove();
-      break;
-    case 11:
-      console.log(index);
-      modalNextBtn.remove();
+  if (modalContainer) {
+    switch(index) {
+      case 0:
+        console.log(index);
+        modalPrevBtn.remove();
+        break;
+      case 11:
+        console.log(index);
+        modalNextBtn.remove();
+    }
   }
+  
   modalPrevBtn.addEventListener('click', () => {
     console.log('Previous contact');
     modalContainer.remove(); 
