@@ -93,9 +93,17 @@ function createModal(index) {
   }
   if (modalContainer) {
     switch(index) {
+      case '0':
+        console.log(index);
+        modalPrevBtn.remove();
+        break;
       case 0:
         console.log(index);
         modalPrevBtn.remove();
+        break;
+      case '11':
+        console.log(index);
+        modalNextBtn.remove();
         break;
       case 11:
         console.log(index);
