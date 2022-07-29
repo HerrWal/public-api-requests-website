@@ -2,6 +2,12 @@ const randomUsersURL = "https://randomuser.me/api/?results=12&nat=us";
 const galleryDiv = document.getElementById("gallery");
 const cards = document.getElementsByClassName('card');
 const body = document.querySelector('body');
+const searchContainer = document.querySelector('.search-container');
+searchContainer.innerHTML = `                        
+  <form action="#" method="get">
+    <input type="search" id="search-input" class="search-input" placeholder="Search...">
+    <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+  </form>`;  
 let contactsList;
 let selectedContactIndex;
 
@@ -36,7 +42,8 @@ function generateHTML(contactInfo) {
   contactInfo.map((contact, index) => {
     const card = document.createElement("div");
     card.classList.add("card");
-    card.dataset.employeeIndex = `${index}`;
+    card.dataset.employeeIndex = index;
+    card.dataset.name = contact.name;
     card.innerHTML = `
                 <div class="card-img-container">
                     <img class="card-img" src="${contact.image}" alt="profile picture">
@@ -49,15 +56,6 @@ function generateHTML(contactInfo) {
             `;
     galleryDiv.insertAdjacentElement("beforeend", card);
   });
-}
-
-function createSearchBar() {
-  const searchContainer = document.querySelector('.search-container');
-  searchContainer.innerHTML = `                        
-    <form action="#" method="get">
-      <input type="search" id="search-input" class="search-input" placeholder="Search...">
-      <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
-    </form>`;
 }
 
 function createModal(index) {
@@ -103,8 +101,7 @@ function createModal(index) {
         console.log(index);
         modalNextBtn.remove();
     }
-  }
-  
+  }  
   modalPrevBtn.addEventListener('click', () => {
     console.log('Previous contact');
     modalContainer.remove(); 
@@ -115,6 +112,17 @@ function createModal(index) {
     modalContainer.remove();
     createModal(++index);
   });   
+}
+
+function search() {  
+  const searchBar = document.querySelector('.search-imput');
+  const submitBtn = document.querySelector('#search-submit');
+  const name = searchBar.value;
+  const searchResults = cards.filter(card, () => {
+    const matchingName = card.dataset.name.toLowerCase();
+    matchingName.includes(name.toLowerCase())
+  })
+  console.log(searchResults);
 }
 
 const loadPage = async () => {
@@ -129,7 +137,7 @@ const loadPage = async () => {
         }
       }      
     });
-    createSearchBar();
+    
     return contactCards;
   } catch (err) {
     throw err;
