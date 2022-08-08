@@ -2,12 +2,6 @@ const randomUsersURL = "https://randomuser.me/api/?results=12&nat=us";
 const galleryDiv = document.getElementById("gallery");
 const cards = document.getElementsByClassName('card');
 const body = document.querySelector('body');
-const searchContainer = document.querySelector('.search-container');
-searchContainer.innerHTML = `                        
-  <form action="#" method="get">
-    <input type="search" id="search-input" class="search-input" placeholder="Search...">
-    <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
-  </form>`;  
 let contactsList;
 let selectedContactIndex;
 
@@ -38,7 +32,7 @@ const randomUsers = async (url) => {
   return contactsInfo;
 };
 
-function generateHTML(contactInfo) {
+function generateHTML(contactInfo) { 
   contactInfo.map((contact, index) => {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -122,15 +116,24 @@ function createModal(index) {
   });   
 }
 
-function search() {  
-  const searchBar = document.querySelector('.search-imput');
-  const submitBtn = document.querySelector('#search-submit');
-  const name = searchBar.value;
-  const searchResults = cards.filter(card, () => {
-    const matchingName = card.dataset.name.toLowerCase();
-    matchingName.includes(name.toLowerCase())
-  })
-  console.log(searchResults);
+function search() {
+  const searchContainer = document.querySelector('.search-container');   
+  searchContainer.innerHTML = `                        
+  <form action="#" method="get">
+    <input type="search" id="search-input" class="search-input" placeholder="Search...">
+    <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+  </form>`;
+  const searchBar = document.getElementById("search-input");
+  const submitBtn = document.getElementById("search-submit");
+  submitBtn.addEventListener('click', ()=>{
+    const name = searchBar.value;
+    const searchResults = cards.filter(card, () => {
+      const matchingName = card.dataset.name.toLowerCase();
+      return matchingName.includes(name.toLowerCase())
+    })
+    console.log(matchingName)  ;
+  });
+  
 }
 
 const loadPage = async () => {
@@ -145,12 +148,11 @@ const loadPage = async () => {
         }
       }      
     });
-    
+    await search();
     return contactCards;
   } catch (err) {
     throw err;
     console.error(err);
   }
 };
-
 loadPage();
