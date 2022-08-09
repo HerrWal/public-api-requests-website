@@ -88,29 +88,23 @@ function createModal(index) {
   if (modalContainer) {
     switch(index) {
       case '0':
-        console.log(index);
         modalPrevBtn.remove();
         break;
       case 0:
-        console.log(index);
         modalPrevBtn.remove();
         break;
       case '11':
-        console.log(index);
         modalNextBtn.remove();
         break;
       case 11:
-        console.log(index);
         modalNextBtn.remove();
     }
   }  
   modalPrevBtn.addEventListener('click', () => {
-    console.log('Previous contact');
     modalContainer.remove(); 
     createModal(--index);
   });
   modalNextBtn.addEventListener('click', () => {
-    console.log('Next contact');    
     modalContainer.remove();
     createModal(++index);
   });   
@@ -125,15 +119,15 @@ function search() {
   </form>`;
   const searchBar = document.getElementById("search-input");
   const submitBtn = document.getElementById("search-submit");
-  submitBtn.addEventListener('click', ()=>{
+  submitBtn.addEventListener('click', () => {
     const name = searchBar.value;
-    const searchResults = cards.filter(card, () => {
-      const matchingName = card.dataset.name.toLowerCase();
-      return matchingName.includes(name.toLowerCase())
-    })
-    console.log(matchingName)  ;
-  });
-  
+    console.log(name)
+    
+    // const searchResults = cards.filter((card) => {
+    //   return card.dataset.name.toLowerCase().includes(name.toLowerCase());
+    // })
+    // console.log(searchResults);
+  });  
 }
 
 const loadPage = async () => {
