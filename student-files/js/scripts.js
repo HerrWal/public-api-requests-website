@@ -121,12 +121,12 @@ function search() {
   const submitBtn = document.getElementById("search-submit");
   submitBtn.addEventListener('click', () => {
     const name = searchBar.value;
-    console.log(name)
-    
-    // const searchResults = cards.filter((card) => {
-    //   return card.dataset.name.toLowerCase().includes(name.toLowerCase());
-    // })
-    // console.log(searchResults);
+    const cardsArray = Array.from(cards);
+    const searchResults = [].concat(...cardsArray.filter(card => card.dataset.name.toLowerCase().includes(name.toLowerCase())));
+    console.log(searchResults);
+    console.log(cardsArray);    
+    cardsArray.forEach(card => card.style.display = 'none');
+    searchResults.forEach(result => result.style.display = '');
   });  
 }
 
