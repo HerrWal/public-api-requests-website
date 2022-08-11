@@ -16,7 +16,7 @@ html, body {
 body {
     font-family: "Nunito", sans-serif;
     text-align: center;
-    background: rgba(235, 235, 235, 0.9);
+    background: #ccd5ae;
 }
 
 header {
@@ -85,9 +85,9 @@ header h1 {
     max-width: 360px;
     margin: 10px 10px 20px;
     padding: 10px;
-    background: rgba(245, 245, 245, 0.9);
+    background: #e9edc9;
     border-radius: 0.25em;
-    border: 1px solid rgba(50, 50, 50, 0.3);
+    border: 1px solid #faedcd;
     transition: .4s ease-out;
     overflow: hidden;
 }
@@ -103,6 +103,7 @@ header h1 {
 }
 
 .card-name {
+    color: #d4a373;
     margin: 20px auto 0;
 }
 
@@ -138,9 +139,9 @@ header h1 {
     min-height: 415px;
     margin: 10px auto auto;
     padding-bottom: 15px;
-    background: rgba(255, 255, 255, 1);
+    background: #e9edc9;
     border-radius: 0.25em;
-    border: 1px solid rgba(100, 100, 100, 0.3);
+    border: 1px solid #d4a373;
     transition: .4s ease-out;
 }
 
@@ -162,6 +163,7 @@ header h1 {
 }
 
 .modal-name {
+    color: #d4a373;
     margin-bottom: 5px;
 }
 
@@ -185,7 +187,7 @@ header h1 {
     max-width: 420px;
     padding: 10px 15px 15px;;
     margin: 10px auto auto;
-    background: rgba(255, 255, 255, 1);
+    background: #e9edc9;
     border-radius: 0.25em;
     border: 1px solid rgba(100, 100, 100, 0.3);
 }
@@ -196,9 +198,9 @@ header h1 {
     cursor: pointer;
     font-size: 0.85em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(254, 250, 224, 0.9);
     padding: 0.75em 1.5em;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(212, 163, 115, 0.8);
     border-radius: 0.35em;
     transition: .4s ease-out;
 }
@@ -250,8 +252,8 @@ header h1 {
 @media (min-width: 1024px) {
 
     .card:hover {
-        background: rgba(255, 255, 255, 1);
-        border: 1px solid rgba(50, 50, 50, 0.9);
+        background: #fefae0;
+        border: 1px solid #d4a373;
     }
 
     .card:hover .card-text {
@@ -259,7 +261,7 @@ header h1 {
     }
 
     .btn:hover {
-        background: rgba(255, 255, 255, 1);
+        background: #fefae0;
         color: rgba(25, 25, 25, 1); 
     }
 }
