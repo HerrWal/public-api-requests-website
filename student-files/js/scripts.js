@@ -122,9 +122,7 @@ function search() {
   submitBtn.addEventListener('click', () => {
     const name = searchBar.value;
     const cardsArray = Array.from(cards);
-    const searchResults = [].concat(...cardsArray.filter(card => card.dataset.name.toLowerCase().includes(name.toLowerCase())));
-    console.log(searchResults);
-    console.log(cardsArray);    
+    const searchResults = [].concat(...cardsArray.filter(card => card.dataset.name.toLowerCase().includes(name.toLowerCase())));   
     cardsArray.forEach(card => card.style.display = 'none');
     searchResults.forEach(result => result.style.display = '');
   });  
