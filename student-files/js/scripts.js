@@ -1,3 +1,4 @@
+//Definitions
 const randomUsersURL = "https://randomuser.me/api/?results=12&nat=us";
 const galleryDiv = document.getElementById("gallery");
 const cards = document.getElementsByClassName("card");
@@ -5,6 +6,10 @@ const body = document.querySelector("body");
 let contactsList;
 let selectedContactIndex;
 
+/** 
+ * @param {string} url - Random user api url 
+ * Fetch data from url and parses the response to json format 
+ */
 const usersJSON = async (url) => {
   try {
     const response = await fetch(url);
@@ -15,6 +20,10 @@ const usersJSON = async (url) => {
   }
 };
 
+/** 
+ * @param {string} url - Random user api url
+ * @returns {object} users with contact information
+ */
 const randomUsers = async (url) => {
   const userJSON = await usersJSON(url);
   const contactsInfo = userJSON.results.map((contact) => {
@@ -35,6 +44,10 @@ const randomUsers = async (url) => {
   return contactsInfo;
 };
 
+/**
+ * @param {object} contactInfo - users with contact information
+ * Generates and display information cards for each user
+ */
 function generateHTML(contactInfo) {
   contactInfo.map((contact, index) => {
     const card = document.createElement("div");
@@ -55,6 +68,11 @@ function generateHTML(contactInfo) {
   });
 }
 
+/**
+ * @param {number} index - The place of the selected user in the array
+ * Creates and display the modal for the selected user and...
+ * handles the logic between the button displayed. 
+ */
 function createModal(index) {
   const modal = `<div class="modal-container">
       <div class="modal">
@@ -89,14 +107,8 @@ function createModal(index) {
   }
   if (modalContainer) {
     switch (index) {
-      case "0":
-        modalPrevBtn.remove();
-        break;
       case 0:
         modalPrevBtn.remove();
-        break;
-      case "11":
-        modalNextBtn.remove();
         break;
       case 11:
         modalNextBtn.remove();
@@ -112,6 +124,9 @@ function createModal(index) {
   });
 }
 
+/**
+ * Implement and display a search feature by name
+ */
 function search() {
   const searchContainer = document.querySelector(".search-container");
   searchContainer.innerHTML = `                        
@@ -120,8 +135,7 @@ function search() {
     <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
   </form>`;
   const searchBar = document.getElementById("search-input");
-  const submitBtn = document.getElementById("search-submit");
-  submitBtn.addEventListener("click", () => {
+  searchBar.addEventListener("keyup", () => {
     const name = searchBar.value;
     const cardsArray = Array.from(cards);
     const searchResults = [].concat(
@@ -134,6 +148,11 @@ function search() {
   });
 }
 
+/**
+ * 
+ * @returns All contacts
+ * Generates the webpage and all of its components asynchronously
+ */
 const loadPage = async () => {
   try {
     contactsList = await randomUsers(randomUsersURL);
@@ -141,7 +160,7 @@ const loadPage = async () => {
     galleryDiv.addEventListener("click", (e) => {
       for (let card of cards) {
         if (card.contains(e.target)) {
-          selectedContactIndex = card.dataset.employeeIndex;
+          selectedContactIndex = parseInt(card.dataset.employeeIndex);
           createModal(selectedContactIndex);
         }
       }
@@ -153,4 +172,5 @@ const loadPage = async () => {
     console.error(err);
   }
 };
+// Bingo!
 loadPage();
