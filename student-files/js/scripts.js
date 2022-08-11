@@ -148,8 +148,7 @@ function search() {
   });
 }
 
-/**
- * 
+/** 
  * @returns All contacts
  * Generates the webpage and all of its components asynchronously
  */
