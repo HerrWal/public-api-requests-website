@@ -1,4 +1,4 @@
-# public-api-request website
+# public-api-request-website
  An app for a fictional company to display employees contact information.
 
 The app was made using Fetch to retrieve data from randomuser.me, a free api used to generate random users data. We use it to generate a list of twelve contact cards for each contact.
