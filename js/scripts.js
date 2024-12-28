@@ -15,8 +15,8 @@ const usersJSON = async (url) => {
     const response = await fetch(url);
     return await response.json();
   } catch (err) {
-    throw err;
     console.error("Uh oh, something has gone wrong!");
+    throw err;    
   }
 };
 
